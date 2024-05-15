@@ -4,17 +4,16 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const Nav = () => {
-  const isUserLoggedIn = true;
+  const { data: session } = useSession();
   const [providers, setProviders] = useState(null);
   const [toggleDropDown, setToggleDropDown] = useState(false);
-
-  // useEffect(() => {
-  //   const getProviders = async () => {
-  //     const response = await getProviders();
-  //     setProviders(response);
-  //   };
-  //   getProviders();
-  // }, []);
+  useEffect(() => {
+    const setUpProviders = async () => {
+      const response = await getProviders();
+      setProviders(response);
+    };
+    setUpProviders();
+  }, []);
 
   return (
     <div className="w-full flex-between mb-16 pt-3">
@@ -24,14 +23,14 @@ const Nav = () => {
           alt="promptopia logo"
           width={30}
           height={30}
-          className=" object-contain"
+          className="object-contain"
         />
         <p className="logo_text">Promptopia</p>
       </Link>
 
       {/* desktop navigation */}
       <div className="sm:flex hidden">
-        {isUserLoggedIn ? (
+        {session?.user ? (
           <div className="flex gap-2">
             <Link href="create-new-prompt" className="black_btn">
               Create Post
@@ -40,8 +39,9 @@ const Nav = () => {
               Sign out
             </button>
             <Image
-              src="assets/images/logo.svg"
+              src={session?.user.image}
               alt="logo"
+              className="rounded-full"
               width={37}
               height={37}
             />
@@ -64,15 +64,15 @@ const Nav = () => {
       </div>
       {/* mobile navigation */}
       <div className="sm:hidden flex relative">
-        {isUserLoggedIn ? (
+        {session?.user ? (
           <div className="">
             <Image
-              src="/assets/images/logo.svg"
+              src={session?.user.image}
               alt="promptopia logo"
               width={30}
               height={30}
               onClick={() => setToggleDropDown((prev) => !prev)}
-              className=" object-contain"
+              className=" object-contain rounded-full"
             />
             {toggleDropDown && (
               <div className="dropdown">
