@@ -1,4 +1,4 @@
-import { signOut, signIn, getProviders, useSession } from "next-auth/react";
+import { signIn, signOut, getProviders, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -7,6 +7,7 @@ const Nav = () => {
   const { data: session } = useSession();
   const [providers, setProviders] = useState(null);
   const [toggleDropDown, setToggleDropDown] = useState(false);
+
   useEffect(() => {
     const setUpProviders = async () => {
       const response = await getProviders();
@@ -32,7 +33,7 @@ const Nav = () => {
       <div className="sm:flex hidden">
         {session?.user ? (
           <div className="flex gap-2">
-            <Link href="create-new-prompt" className="black_btn">
+            <Link href="create-prompt" className="black_btn">
               Create Post
             </Link>
             <button className="outline_btn" onClick={signOut}>
