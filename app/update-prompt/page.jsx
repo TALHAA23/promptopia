@@ -1,8 +1,15 @@
 "use client";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Form from "@components/Form";
-import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/router";
+import { useSearchParams, useRouter } from "next/navigation";
+
+const Page = () => {
+  return (
+    <Suspense>
+      <EditPrompt />
+    </Suspense>
+  );
+};
 
 const EditPrompt = () => {
   const router = useRouter();
@@ -16,7 +23,7 @@ const EditPrompt = () => {
   useEffect(() => {
     const getPromptDetails = async () => {
       const response = await fetch(`/api/prompt/${promptId}`);
-      console.log(response);
+
       if (!response.ok) return;
       const data = await response.json();
       setPost({
@@ -25,7 +32,7 @@ const EditPrompt = () => {
       });
     };
     if (promptId) getPromptDetails();
-  }, []);
+  }, [promptId]);
 
   const handleEdit = async (e) => {
     e.preventDefault();
@@ -55,4 +62,4 @@ const EditPrompt = () => {
   );
 };
 
-export default EditPrompt;
+export default Page;
